@@ -17,7 +17,6 @@ function hashCode(s: string) {
     hash |= 0;
     if (hash < 0) hash = -hash;
   }
-  console.log('hashCode', s, '=>', hash);
   return hash;
 }
 
@@ -51,30 +50,8 @@ function getSeason(): 'winter' | 'summer' {
 }
 
 const schedule = {
-  winter: [
-    '08:00',
-    '09:00',
-    '10:10',
-    '11:10',
-    '14:00',
-    '15:00',
-    '16:10',
-    '17:10',
-    '19:10',
-    '20:10'
-  ],
-  summer: [
-    '08:00',
-    '09:00',
-    '10:10',
-    '11:10',
-    '14:30',
-    '15:30',
-    '16:40',
-    '17:40',
-    '19:40',
-    '20:40'
-  ]
+  winter: ['08:00', '09:00', '10:10', '11:10', '14:00', '15:00', '16:10', '17:10', '19:10', '20:10'],
+  summer: ['08:00', '09:00', '10:10', '11:10', '14:30', '15:30', '16:40', '17:40', '19:40', '20:40']
 }
 /**
  * @returns {string[]} paragraphs
@@ -129,16 +106,9 @@ function filterCourses(day: number, time: number, week?: number) {
   return ret;
 }
 
-function hover(id: string, isHovering: boolean) {
-  if (isHovering) {
-    selectedCourseId.value = id;
-    return 8;
-  } else if (selectedCourseId.value == id) {
-    selectedCourseId.value = '';
-    return 4;
-  } else {
-    return 2;
-  }
+function setCourse(id: string, event: Event) {
+  selectedCourseId.value = id
+  event.stopPropagation()
 }
 </script>
 
@@ -173,14 +143,14 @@ function hover(id: string, isHovering: boolean) {
               :key="course.id"
             >
               <v-hover>
-                <template #default="{ isHovering, props} ">
+                <template #default>
                   <v-card
-                    v-bind="props"
                     class="card"
                     :color="colors[hashCode(course.id) % colors.length]"
-                    :class="{ 'inactive': selectedCourseId && selectedCourseId != course.id}"
+                    :class="{ 'inactive': selectedCourseId && selectedCourseId != course.id }"
                     :elevation="course.id == selectedCourseId ? 8 : 2"
-                    :hover="isHovering ? (selectedCourseId = course.id) : true"
+                    @mouseenter="setCourse(course.id, $event)"
+                    @click="setCourse(course.id, $event)"
                   >
                     <div>{{ course.name }}</div>
                     <div>{{ course.classroom }}</div>
