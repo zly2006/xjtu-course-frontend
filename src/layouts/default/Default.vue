@@ -9,6 +9,7 @@ function toggleTheme() {
   location.reload()
 }
 function logout() {
+  useAppStore().removeToken()
   useAppStore().setCredentials('', '')
 }
 </script>

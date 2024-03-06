@@ -129,8 +129,7 @@ function setCourse(id: string, event: Event) {
       >
         <td>
           {{ time }}
-          &nbsp;
-          {{ schedule[getSeason()][time - 1] }}
+          <span class="mobile-hide">&nbsp;{{ schedule[getSeason()][time - 1] }}</span>
         </td>
         <template v-if="time % 2">
           <td
@@ -151,9 +150,10 @@ function setCourse(id: string, event: Event) {
                     :elevation="course.id == selectedCourseId ? 8 : 2"
                     @mouseenter="setCourse(course.id, $event)"
                     @click="setCourse(course.id, $event)"
+                    ripple
                   >
-                    <div>{{ course.name }}</div>
-                    <div>{{ course.classroom }}</div>
+                    <div class="text-center">{{ course.name }}</div>
+                    <div class="mobile-hide text-details">{{ course.classroom }}</div>
                   </v-card>
                 </template>
               </v-hover>
@@ -163,19 +163,31 @@ function setCourse(id: string, event: Event) {
       </tr>
     </table>
   </div>
-  <p v-for="p in classDetails()" :key="p">
-    {{ p }}
-  </p>
+  <div @click="selectedCourseId = ''">
+    <p v-for="p in classDetails()" :key="p">
+      {{ p }}
+    </p>
+  </div>
 </template>
 <style scoped>
 .card {
-  margin: 4px;
+  margin: 4px 0;
 }
 .header-item {
-  min-width: 36px;
+  min-width: 58px;
 }
 .inactive {
   opacity: 0.5;
   cursor: pointer;
+}
+.text-details {
+  text-align: center;
+  font-size: 12px;
+}
+
+@media (max-width: 600px) {
+  .mobile-hide {
+    display: none;
+  }
 }
 </style>
